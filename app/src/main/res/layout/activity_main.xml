@@ -16,4 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclevierw.widget.RecyclerView
+        android:id="@+id/repo_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layouttManager
+
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
