@@ -1,11 +1,10 @@
 package ec.edu.uisek.githubclient.models
 
-import org.intellij.lang.annotations.Language
+import com.google.gson.annotations.SerializedName
 
 data class Repo(
-    val id: Long,
-    val name: String,
-    val description: String?,
-    val language: String?,
-    val owner: RepoOwner
+    @SerializedName("name") val name: String,
+    @SerializedName("description") val description: String?,
+    @SerializedName("language") val language: String?,
+    @SerializedName("owner") val owner: RepoOwner
 )
