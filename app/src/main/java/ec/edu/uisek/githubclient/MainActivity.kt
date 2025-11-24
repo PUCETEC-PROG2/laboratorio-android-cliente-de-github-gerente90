@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ec.edu.uisek.githubclient.databinding.ActivityMainBinding
 import ec.edu.uisek.githubclient.models.Repo
 import ec.edu.uisek.githubclient.services.RetrofitClient
+import ec.edu.uisek.githubclient.AddRepoFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,17 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         fetchRepositories()
+
+        binding.btnAddRepo.setOnClickListener {
+            // Para comprobar que el click funciona
+            Toast.makeText(this, "Click en Nuevo Repositorio", Toast.LENGTH_SHORT).show()
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main, AddRepoFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     private fun setupRecyclerView() {
@@ -72,4 +85,5 @@ class MainActivity : AppCompatActivity() {
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 }
