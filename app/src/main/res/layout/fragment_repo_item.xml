@@ -4,45 +4,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <ImageView
-        android:id="@+id/ivOwnerAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/repoOwnerImage"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="Avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvRepoName"
+        android:id="@+id/repoName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Nombre del repositorio"
         android:textStyle="bold"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/ivOwnerAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivOwnerAvatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="12dp" />
+        app:layout_constraintStart_toEndOf="@id/repoOwnerImage"
+        app:layout_constraintTop_toTopOf="@id/repoOwnerImage"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvRepoDescription"
+        android:id="@+id/repoDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/tvRepoName"
-        app:layout_constraintTop_toBottomOf="@id/tvRepoName"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="4dp" />
+        android:text="Descripción del repositorio"
+        app:layout_constraintStart_toStartOf="@id/repoName"
+        app:layout_constraintTop_toBottomOf="@id/repoName"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvRepoLanguage"
+        android:id="@+id/repoLang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/tvRepoName"
-        app:layout_constraintTop_toBottomOf="@id/tvRepoDescription"
-        android:layout_marginTop="4dp" />
+        android:text="Lenguaje"
+        app:layout_constraintStart_toStartOf="@id/repoName"
+        app:layout_constraintTop_toBottomOf="@id/repoDescription" />
+
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Editar repositorio"
+        android:tint="#5B3FA4"
+        app:srcCompat="@drawable/ic_edit_24"
+        app:layout_constraintTop_toBottomOf="@id/repoLang"
+        app:layout_constraintStart_toStartOf="@id/repoName" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Eliminar repositorio"
+        android:tint="#CC3333"
+        app:srcCompat="@drawable/ic_delete_24"
+        app:layout_constraintTop_toTopOf="@id/btnEdit"
+        app:layout_constraintStart_toEndOf="@id/btnEdit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

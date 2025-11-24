@@ -3,16 +3,15 @@ package ec.edu.uisek.githubclient
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ec.edu.uisek.githubclient.databinding.ActivityMainBinding
 import ec.edu.uisek.githubclient.models.Repo
 import ec.edu.uisek.githubclient.services.RetrofitClient
-import ec.edu.uisek.githubclient.AddRepoFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,29 +25,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupRecyclerView()
+        setupFab()
         fetchRepositories()
-
-        binding.btnAddRepo.setOnClickListener {
-            // Para comprobar que el click funciona
-            Toast.makeText(this, "Click en Nuevo Repositorio", Toast.LENGTH_SHORT).show()
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main, AddRepoFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
     }
 
     private fun setupRecyclerView() {
-        reposAdapter = ReposAdapter()
+        reposAdapter = ReposAdapter(
+            onEdit = { repo -> openEditRepo(repo) },
+            onDelete = { repo -> confirmDeleteRepo(repo) }
+        )
         binding.repoRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = reposAdapter
         }
     }
 
-    private fun fetchRepositories() {
+    private fun setupFab() {
+        binding.fabAddRepo.setOnClickListener {
+            val fragment = AddRepoFragment.newInstanceForCreate()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    fun fetchRepositories() {
         val call = RetrofitClient.gitHubApiService.getRepos()
 
         call.enqueue(object : Callback<List<Repo>> {
@@ -82,8 +84,46 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun openEditRepo(repo: Repo) {
+        val fragment = AddRepoFragment.newInstanceForEdit(repo)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun confirmDeleteRepo(repo: Repo) {
+        AlertDialog.Builder(this)
+            .setTitle("Eliminar repositorio")
+            .setMessage("¿Seguro que quieres eliminar \"${repo.name}\"? Esta acción no se puede deshacer.")
+            .setPositiveButton("Eliminar") { _, _ ->
+                deleteRepo(repo)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun deleteRepo(repo: Repo) {
+        val owner = repo.owner.login
+
+        RetrofitClient.gitHubApiService.deleteRepo(owner, repo.name)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        showMessage("Repositorio eliminado")
+                        fetchRepositories()
+                    } else {
+                        showMessage("Error al eliminar: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    showMessage("Error de conexión al eliminar")
+                }
+            })
+    }
+
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
 }
